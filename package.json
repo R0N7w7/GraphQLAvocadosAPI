@@ -8,11 +8,18 @@
     "dev": "nodemon src/index.ts"
   },
   "module": "es2022",
-  "include": ["src/**/*", "types.d.ts"],
+  "include": [
+    "src/**/*",
+    "types.d.ts"
+  ],
   "dependencies": {
     "apollo-server": "^3.13.0",
     "graphql": "^16.9.0",
     "nodemon": "^3.1.4",
+    "prisma": "^5.19.1",
     "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@prisma/client": "^5.19.1"
   }
 }

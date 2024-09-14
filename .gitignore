@@ -234,6 +234,12 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+
+
+# Ignorar archivos temporales de SQLite
+*.db
+*.db-journal
+
 ### yarn ###
 # https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
 
