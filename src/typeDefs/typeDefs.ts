@@ -9,7 +9,8 @@ export const typeDefs = gql`
 
   type Mutation{
     updateAvocado(id: String!, ptoAvocado: AvocadoInput!): Avocado,
-    deleteAvocado(id: String!): String
+    deleteAvocado(id: String!): String,
+    createAvocado(ptoAvocado: AvocadoInput!): Avocado
   }
 
   type Avocado {

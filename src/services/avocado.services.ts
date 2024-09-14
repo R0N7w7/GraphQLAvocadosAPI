@@ -17,6 +17,11 @@ export class AvocadoService {
     return this.avocados.find((avocado) => avocado.ID === id);
   }
 
+  createAvocado(newAvocado: Avocado) {
+    this.avocados.push(newAvocado);
+    return newAvocado;
+  }
+
   updateAvocado(id: string, body: Avocado) {
     const index = this.avocados.findIndex((avocado) => avocado.ID === id);
     if (index == -1) {

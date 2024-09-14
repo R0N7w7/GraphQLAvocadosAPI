@@ -1,4 +1,4 @@
-import { deleteAvocado, getAvocado, getAvocados, updateAvocado } from "./avocado.resolvers";
+import { createAvocado, deleteAvocado, getAvocado, getAvocados, updateAvocado } from "./avocado.resolvers";
 
 export const resolvers = {
   Query: {
@@ -8,6 +8,7 @@ export const resolvers = {
   },
   Mutation: {
     updateAvocado,
-    deleteAvocado
+    deleteAvocado,
+    createAvocado
   }
 }
