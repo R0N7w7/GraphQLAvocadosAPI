@@ -1,43 +1,71 @@
-import {Avocado} from "api/type";
-import { avocadosList } from "../database/avocados";
+import { Attributes, Avocado, PrismaClient } from '@prisma/client';
 
 export class AvocadoService {
 
-  avocados: Avocado[];
+  private prisma: PrismaClient;
+  private DB: PrismaClient['avocado'];
 
   constructor() {
-    this.avocados = avocadosList;
+    this.prisma = new PrismaClient();
+    this.DB = this.prisma.avocado;
   }
 
-  getAvocados() {
-    return this.avocados;
+  async getAvocados() {
+    return await this.DB.findMany({
+      include: {
+        attributes: true
+      }
+    });
   }
 
-  getAvocado(id: string) {
-    return this.avocados.find((avocado) => avocado.ID === id);
+  async getAvocado(id: string) {
+    return await this.DB.findUnique({
+      where: { id: Number(id) },
+      include: { attributes: true } // Incluir los atributos
+    });
   }
 
-  createAvocado(newAvocado: Avocado) {
-    this.avocados.push(newAvocado);
-    return newAvocado;
+  async createAvocado(newAvocado: Omit<Avocado, 'id'>, attributes: Omit<Attributes, 'id' | 'avocadoId'>) {
+    return await this.DB.create({
+      data: {
+        ...newAvocado,
+        attributes: {
+          create: attributes // Crea los atributos asociados al aguacate
+        }
+      },
+      include: {
+        attributes: true
+      }
+    });
   }
 
-  updateAvocado(id: string, body: Avocado) {
-    const index = this.avocados.findIndex((avocado) => avocado.ID === id);
-    if (index == -1) {
-      return null;
-    }
-    this.avocados[index] = body;
-    return this.avocados[index];
+  async updateAvocado(id: string, data: Partial<Avocado>, attributes: Partial<Attributes>){
+    return await this.DB.update({
+      where: { id : Number(id) },
+      data: {
+        ...data,
+        attributes: {
+          update: attributes
+        }
+      },
+      include: {
+        attributes: true
+      }
+    });
   }
 
-  deleteAvocado(id: string) {
-    const index = this.avocados.findIndex((avocado) => avocado.ID === id);
-    if (index == -1) {
-      return null;
-    }
-    this.avocados.splice(index, 1);
-    return id;
-  }
+  async deleteAvocado(id: string) {
+    await this.prisma.attributes.deleteMany({
+      where: {
+        avocadoId: Number(id)
+      }
+    });
 
+    return await this.DB.delete({
+      where: {
+        id: Number(id),
+      },
+      include: { attributes: true } // Esto se asegura de que se borren ambos
+    });
+  }
 }

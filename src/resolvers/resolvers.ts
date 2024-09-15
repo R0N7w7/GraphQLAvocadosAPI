@@ -2,13 +2,12 @@ import { createAvocado, deleteAvocado, getAvocado, getAvocados, updateAvocado } 
 
 export const resolvers = {
   Query: {
-    hello: () => "this is an insane server with graphQL",
-    avocados: getAvocados,
-    avocado: getAvocado,
+    getAvocados,
+    getAvocado,
   },
   Mutation: {
+    createAvocado,
     updateAvocado,
     deleteAvocado,
-    createAvocado
-  }
-}
+  },
+};

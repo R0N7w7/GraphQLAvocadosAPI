@@ -1,37 +1,54 @@
-import {Avocado} from "api/type";
+import { Attributes, Avocado } from "@prisma/client";
 import { AvocadoService } from "../services/avocado.services";
 
-const avocadoServices = new AvocadoService();
+const avocadoService = new AvocadoService();
 
-const getAvocados= () => {
-  const avocados = avocadoServices.getAvocados();
-  return avocados;
+const getAvocados = async () => {
+  try {
+    return await avocadoService.getAvocados();
+  } catch (error) {
+    console.error('Error getting avocados:', error);
+    throw new Error('Could not fetch avocados');
+  }
 }
 
-const getAvocado = (_ : undefined, { id } : {id : string}) => {
-  const avocado = avocadoServices.getAvocado(id);
-  return avocado;
+const getAvocado = async (_: undefined, { id }: { id: string }) => {
+  try {
+    return await avocadoService.getAvocado(id);
+  } catch (error) {
+    console.error(`Error getting avocado with id ${id}:`, error);
+    throw new Error(`Could not fetch avocado with id ${id}`);
+  }
 }
 
-const createAvocado = (_: undefined, { ptoAvocado }: { ptoAvocado: Avocado }) => {
-  const newAvocado = avocadoServices.createAvocado(ptoAvocado);
-  return newAvocado;
+const createAvocado = async (_: undefined, { avocado, attributes }: { avocado: Omit<Avocado, 'id'>, attributes: Omit<Attributes, 'id' | 'avocadoId'> }) => {
+  try {
+    return await avocadoService.createAvocado(avocado, attributes);
+  } catch (error) {
+    console.error('Error creating avocado:', error);
+    throw new Error('Could not create avocado');
+  }
 }
 
-const updateAvocado = (_: undefined, { id, ptoAvocado }: { id:string, ptoAvocado: Avocado }) => {
-  const updatedAvocado = avocadoServices.updateAvocado(id, ptoAvocado);
-  return updatedAvocado;
+const updateAvocado = async (_: undefined, { id, avocado, attributes }: { id: string, avocado: Partial<Avocado>, attributes: Partial<Attributes> }) => {
+  try {
+    return await avocadoService.updateAvocado(id, avocado, attributes);
+  } catch (error) {
+    console.error(`Error updating avocado with id ${id}:`, error);
+    throw new Error(`Could not update avocado with id ${id}`);
+  }
 }
 
-const deleteAvocado = (_: undefined, { id }: { id: string }) => {
-  const deletedAvocadoIndex = avocadoServices.deleteAvocado(id);
-  return deletedAvocadoIndex;
+const deleteAvocado = async (_: undefined, { id }: { id: string }) => {
+  try {
+    return await avocadoService.deleteAvocado(id);
+  } catch (error) {
+    console.error(`Error deleting avocado with id ${id}:`, error);
+    throw new Error(`Could not delete avocado with id ${id}`);
+  }
 }
 
 export {
-  deleteAvocado, getAvocado,
-  getAvocados,
-  updateAvocado,
-  createAvocado
+  createAvocado, deleteAvocado, getAvocado,
+  getAvocados, updateAvocado
 };
-
